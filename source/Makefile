@@ -13,9 +13,13 @@ else
 		# macOS
 		LDLIBS=-llapack -lblas
 	else
+		# My system
+		LDLIBS=-lblas
+		LDLIBS=-lblas
+
 		# Gbar
-		LDFLAGS=-L/usr/lib64/atlas
-		LDLIBS=-llapack -lf77blas -latlas
+		#LDFLAGS=-L/usr/lib64/atlas
+		#LDLIBS=-llapack -lf77blas -latlas
 	endif
 endif
 
@@ -23,9 +27,9 @@ endif
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): matrix_io.o lssolve.o
+$(EXECUTABLE): matrix_io.o #lssolve.o
 
-lssolve.o: lssolve.h
+#lssolve.o: lssolve.h
 matrix_io.o: matrix_io.h
 
 clean:
