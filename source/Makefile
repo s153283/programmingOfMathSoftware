@@ -5,22 +5,20 @@ EXECUTABLE=lssolve
 
 # Detect OS and set linker flags accordingly
 ifdef SystemRoot
- 	# Windows
-	LDFLAGS=-L.
-	LDLIBS=-lopenblas
+# Windows
+LDFLAGS=-L.
+LDLIBS=-lopenblas
 else
- 	ifeq ($(shell uname), Darwin)
+ifeq ($(shell uname), Darwin)
 		# macOS
-		LDLIBS=-llapack -lblas
-	else
-		# My system
-		LDLIBS=-lblas
-		LDLIBS=-lblas
+LDLIBS=-llapack -lblas
+else
+LDLIBS=-lblas -lgfortran
 
 		# Gbar
 		#LDFLAGS=-L/usr/lib64/atlas
 		#LDLIBS=-llapack -lf77blas -latlas
-	endif
+endif
 endif
 
 .PHONY: all clean run
@@ -29,7 +27,7 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): matrix_io.o lssolve.o
 
-lssolve.o: lssolve.h
+lssolve.o: lssolve.h matrix_io.h
 matrix_io.o: matrix_io.h
 
 clean:
