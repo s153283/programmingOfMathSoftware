@@ -7,7 +7,7 @@ EXECUTABLE=lssolve
 ifdef SystemRoot
  	# Windows
 	LDFLAGS=-L.
-	LDLIBS=-lopenblas
+	LDLIBS=-lopenblas -lgfortran
 else
  	ifeq ($(shell uname), Darwin)
 		# macOS

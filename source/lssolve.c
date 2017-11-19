@@ -30,6 +30,12 @@ int main(int argc, char * argv[]) {
       &info           /* status code            */
   );
 
+
+  printf("rowA %d\n",rowA);
+  printf("colA %d\n",colA);
+  printf("colb %d\n",colb);
+  printf("rowb %d\n",rowb);
+
   printf("Matrix A:\n");
   print_matrix(A);
   printf("Vector b:\n");
