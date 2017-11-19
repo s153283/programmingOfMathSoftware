@@ -5,15 +5,15 @@ EXECUTABLE=lssolve
 
 # Detect OS and set linker flags accordingly
 ifdef SystemRoot
-# Windows
+ # Windows
 LDFLAGS=-L.
-LDLIBS=-lopenblas
+LDLIBS=-lopenblas -lgfortran
 else
 ifeq ($(shell uname), Darwin)
 		# macOS
 LDLIBS=-llapack -lblas
 else
-LDLIBS=-lblas -lgfortran
+LDLIBS=-llapack -lblas -lgfortran
 
 		# Gbar
 		#LDFLAGS=-L/usr/lib64/atlas

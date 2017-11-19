@@ -12,25 +12,37 @@ int main(int argc, char * argv[]) {
   matrix_t *A = read_matrix(argv[1]);
   vector_t *b = read_vector(argv[2]);
 
-
-  vector_t *x = malloc_vector(A->n);
   char trans[2] = "T";
-  int info=1;
-  int rowA=(int)(A->m), colA=(int)(A->n);
+  int lwork = 6;
+  double work[lwork];
+  int info=-10;
+  int Am=(int)(A->m), An=(int)(A->n);
   int colb =1, rowb= (int)(b->n);
-  dgels_(trans,&rowA,&colA, &colb,A->A[0],&rowA,b->v,&rowb,x->v,&colA, &info);
-
-  double a = 3.0;
-
-  printf("Matrix A:\n");
+  printf("A:\n");
   print_matrix(A);
   printf("Vector b:\n");
   print_vector(b);
-  dscal_(&rowb, &a, b->v, &colb);
-  printf("Vector 3* b:\n");
+  printf("Am: %d  , An: %d\n",Am,An);
+  printf("n of b %ld\n", (b->n));
+  dgels_(trans // 'T'
+        ,&An    // M = 3
+        ,&Am    // N = 10
+        ,&colb // NRHS = 1
+        ,A->A[0]  // A
+        ,&An      // LDA= 3
+        ,b->v     // B
+        ,&rowb    // LDB = 10
+        ,work     // double work[6]
+        ,&lwork   // lwork = 6
+        ,&info    // only for output
+      );
+  printf("n of b %ld\n", (b->n));
+  printf("The char is %c\n",*trans);
+  printf("Info is %d\n",info );
+
+  printf("Solution:\n");
   print_vector(b);
 
-  print_vector(x);
   printf("The solution will be saved as %s\n",argv[3]);
 
   write_vector(argv[3],b);
