@@ -22,4 +22,5 @@ int main(int argc, char const *argv[]) {
   free_matrix(A);
 
   return 0;
+  // Jaxx er et skod
 }
