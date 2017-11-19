@@ -18,12 +18,5 @@ void dgels_(
     int * info           /* status code            */
 );
 
-void dscal_(
-   const int * n,          /* length of array     */
-   const double * a,       /* scalar a            */
-   double * x,             /* array x             */
-   const int * incx        /* array x, stride     */
-);
-
 
 #endif

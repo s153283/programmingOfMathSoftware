@@ -7,13 +7,13 @@ EXECUTABLE=lssolve
 ifdef SystemRoot
  # Windows
 LDFLAGS=-L.
-LDLIBS=-lopenblas -lgfortran
+LDLIBS=-lopenblas -lgfortran -lm
 else
 ifeq ($(shell uname), Darwin)
 		# macOS
-LDLIBS=-llapack -lblas
+LDLIBS=-llapack -lblas -lm
 else
-LDLIBS=-llapack -lblas -lgfortran
+LDLIBS=-llapack -lblas -lgfortran -lm
 
 		# Gbar
 		#LDFLAGS=-L/usr/lib64/atlas
