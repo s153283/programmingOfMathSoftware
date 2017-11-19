@@ -36,4 +36,4 @@ clean:
 	-$(RM) *.o $(EXECUTABLE)
 
 run: $(EXECUTABLE)
-	./$< $(ARGS)
+	./$< $(ARGS) A.txt b.txt solution.txt
