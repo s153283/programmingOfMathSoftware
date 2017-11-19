@@ -16,8 +16,8 @@ int main(int argc, char * argv[]) {
   printf("Vector b:\n");
   print_vector(b);
 
-  printf("The solution will be saved at %s\n",argv[3]);
+  printf("The solution will be saved as %s\n",argv[3]);
 
-
+  write_vector(argv[3],b);
   return EXIT_SUCCESS;
 }
