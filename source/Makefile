@@ -27,9 +27,9 @@ endif
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): matrix_io.o #lssolve.o
+$(EXECUTABLE): matrix_io.o lssolve.o
 
-#lssolve.o: lssolve.h
+lssolve.o: lssolve.h
 matrix_io.o: matrix_io.h
 
 clean:
