@@ -13,6 +13,7 @@ ifeq ($(shell uname), Darwin)
 		# macOS
 LDLIBS=-llapack -lblas -lm
 else
+# Code to compile on Simon's Unix systme
 #LDLIBS=-llapack -lblas -lgfortran -lm
 
 # Gbar

@@ -2,8 +2,20 @@
 #include "matrix_io.h"
 #include "lssolve.h"
 #include <math.h>
+#include <assert.h>
 
 int main(int argc, char * argv[]) {
+
+  // Initialize varibles
+  double length_b = 0;
+  double length_Residual = 0;
+  char trans = 'T';
+  int info=-100;
+  int Am, An;
+  int colb, rowb;
+  int lwork;
+
+  // Check if the number of inputs are Correct.
   if (argc != 4) {
     printf("Invalid number of input. Correct input form:\n");
     printf("./lssolve A.txt b.txt solution.txt\n");
@@ -12,15 +24,15 @@ int main(int argc, char * argv[]) {
 
   // Reading the txt-files and printing the files
   matrix_t *A = read_matrix(argv[1]);
+  assert(A!=NULL);
   vector_t *b = read_vector(argv[2]);
-  double length_b = 0;
-  double length_Residual = 0;
+  assert(b!=NULL);
   print_vector(b);
   print_matrix(A);
   printf("A is a %dx%d matrix\n",(int)A->m,(int)A->n);
   printf("b is a %d vector\n",(int)b->n);
 
-  // testing A and b
+  // testing A and b's dimensions fit
   if (A->m != b->n) {
     printf("Dimension of A.m is not equal to dimension of b.n\n");
     free_vector(b);
@@ -33,36 +45,45 @@ int main(int argc, char * argv[]) {
   for (size_t i = 0; i < b->n; i++) {
     length_b += b->v[i]*b->v[i];
   }
+  assert(length_b>0);
   length_b = sqrt(length_b);
+  // Set the variables for the function call
+  Am=(int)(A->m);
+  An=(int)(A->n);
+  colb =1;
+  rowb= (int)(b->n);
+  lwork = 2*An;
 
-  // Initial for the function
-  char trans = 'T';
-  int info=-1;
-  int Am=(int)(A->m), An=(int)(A->n);
-  int colb =1, rowb= (int)(b->n);
-  int lwork = 2*An;
+  // Allocate work space for dgels_
   double * work = (double *)malloc(lwork*sizeof(work[0]));
+  if (work==NULL) {
+    printf("There is not enough memory to allocate work space\n");
+    free_vector(b);
+    free_matrix(A);
+    return -1;
+  }
 
   // call
   dgels_(&trans, // 'T'
-         &An,    // M = 3
-         &Am,    // N = 10
-         &colb, // NRHS = 1
+         &An,    // M
+         &Am,    // N
+         &colb, // NRHS
          A->A[0],  // A
-         &An,      // LDA= 3
+         &An,      // LDA
          b->v,     // B
-         &rowb,    // LDB = 10
-         work,     // double work[6]
-         &lwork,   // lwork = 6
+         &rowb,    // LDB
+         work,     // work
+         &lwork,   // lwork
          &info    // only for output
       );
-  printf("printing output from dgels\n");    
+
+  printf("printing output from dgels\n");
   print_vector(b);
   printf("The info number is %d\n",info);
 
   // Checking output
-  if (info < 0) {
-    printf("the %d-th argument had an illegal value\n",info);
+  if (info != 0) {
+    printf("Error in dgels_\n");
     free(work);
     free_vector(b);
     free_matrix(A);
@@ -81,7 +102,7 @@ int main(int argc, char * argv[]) {
   printf("The relative residual norm: %lf\n",length_Residual/length_b);
 
   // Writes the x* to file
-  b->n = An;
+  b->n = An; // only prints the part of b wich is the solution
   write_vector(argv[3],b);
   vector_t *x = read_vector(argv[3]);
   printf("Testing that the file is safed and checking if it is correct\n");
